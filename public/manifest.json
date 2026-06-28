@@ -1,0 +1,17 @@
+{
+  "name": "Absensi SPPG",
+  "short_name": "Absensi",
+  "description": "Sistem Absensi Pos Security",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#092F54",
+  "theme_color": "#092F54",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

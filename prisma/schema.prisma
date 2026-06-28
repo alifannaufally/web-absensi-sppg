@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  nama        String   @unique
+  permissions String[]
+  users       UserRole[]
+  createdAt   DateTime @default(now())
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  nama      String
+  pegawaiId String?   @unique
+  pegawai   Pegawai?   @relation(fields: [pegawaiId], references: [id])
+  roles     UserRole[]
+  createdAt DateTime   @default(now())
+}
+
+model UserRole {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Divisi {
+  id        String    @id @default(cuid())
+  nama      String
+  isPantau  Boolean   @default(false)
+  jamMasuk  String?
+  jamPulang String?
+  pegawai   Pegawai[]
+  createdAt DateTime  @default(now())
+}
+
+model Pegawai {
+  id        String     @id @default(cuid())
+  nik       String     @unique
+  nama      String
+  divisiId  String
+  divisi    Divisi     @relation(fields: [divisiId], references: [id])
+  absensi   Absensi[]
+  user      User?
+  createdAt DateTime   @default(now())
+
+  @@index([divisiId])
+  @@index([nama])
+}
+
+enum StatusKehadiran {
+  HADIR
+  IZIN
+  CUTI
+  ALPHA
+  TERLAMBAT
+}
+
+model Absensi {
+  id         String          @id @default(cuid())
+  pegawaiId  String
+  pegawai    Pegawai         @relation(fields: [pegawaiId], references: [id], onDelete: Cascade)
+  tanggal    DateTime        @db.Date
+  status     StatusKehadiran
+  jamMasuk   String?
+  jamPulang  String?
+  dicatatOleh String?
+  updatedAt  DateTime        @updatedAt
+
+  @@unique([pegawaiId, tanggal])
+  @@index([tanggal])
+  @@index([pegawaiId])
+}
