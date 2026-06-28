@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AppShell from "@/components/AppShell";
 import * as XLSX from "xlsx";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const STATUS_META: Record<string, { label: string; bg: string }> = {
   HADIR:     { label: "H", bg: "bg-green-100 text-green-700" },
@@ -14,19 +15,36 @@ const STATUS_META: Record<string, { label: string; bg: string }> = {
   BELUM:     { label: "?", bg: "bg-gray-100 text-gray-400" },
 };
 
-function RincianCell({ k }: { k: { status: string; jamMasuk: string | null; jamPulang: string | null } | undefined }) {
+function RincianCell({ k }: { k: { status: string; jamMasuk: string | null; jamPulang: string | null; keterangan: string | null } | undefined }) {
   const s = k?.status || "BELUM";
   const m = STATUS_META[s] || STATUS_META.BELUM;
   const masuk = k?.jamMasuk;
   const pulang = k?.jamPulang;
+  const ket = k?.keterangan;
   const isKerja = s === "HADIR" || s === "TERLAMBAT";
+
+  function handleClick() {
+    if (s === "IZIN" && ket) {
+      toast("Keterangan Izin", {
+        description: ket,
+        duration: 5000,
+      });
+    }
+  }
+
   return (
     <div className="flex flex-col items-center gap-px">
-      <span className={`inline-block w-4 h-4 sm:w-5 sm:h-5 rounded-full text-[8px] sm:text-[10px] leading-4 sm:leading-5 font-bold ${m.bg}`}>
+      <span
+        className={`inline-block w-4 h-4 sm:w-5 sm:h-5 rounded-full text-[8px] sm:text-[10px] leading-4 sm:leading-5 font-bold ${m.bg} ${s === "IZIN" && ket ? "cursor-pointer hover:ring-2 hover:ring-yellow-300" : ""}`}
+        onClick={handleClick}
+      >
         {m.label}
       </span>
       {isKerja && masuk && <span className="text-[9px] text-gray-500 leading-tight">{masuk}</span>}
       {isKerja && pulang && <span className="text-[9px] text-gray-400 leading-tight">{pulang}</span>}
+      {!isKerja && s !== "BELUM" && ket && (
+        <span className="text-[7px] text-gray-400 leading-tight max-w-[40px] truncate" title={ket}>{ket}</span>
+      )}
     </div>
   );
 }
@@ -62,6 +80,7 @@ export default function MonitorPage() {
           Status: k?.status || "BELUM",
           "Jam Masuk": k?.jamMasuk || "",
           "Jam Pulang": k?.jamPulang || "",
+          "Keterangan (Izin)": k?.status === "IZIN" ? (k?.keterangan || "") : "",
         };
       })
     );

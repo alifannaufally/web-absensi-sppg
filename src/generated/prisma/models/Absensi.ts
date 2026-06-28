@@ -31,6 +31,7 @@ export type AbsensiMinAggregateOutputType = {
   status: $Enums.StatusKehadiran | null
   jamMasuk: string | null
   jamPulang: string | null
+  keterangan: string | null
   dicatatOleh: string | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type AbsensiMaxAggregateOutputType = {
   status: $Enums.StatusKehadiran | null
   jamMasuk: string | null
   jamPulang: string | null
+  keterangan: string | null
   dicatatOleh: string | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type AbsensiCountAggregateOutputType = {
   status: number
   jamMasuk: number
   jamPulang: number
+  keterangan: number
   dicatatOleh: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type AbsensiMinAggregateInputType = {
   status?: true
   jamMasuk?: true
   jamPulang?: true
+  keterangan?: true
   dicatatOleh?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type AbsensiMaxAggregateInputType = {
   status?: true
   jamMasuk?: true
   jamPulang?: true
+  keterangan?: true
   dicatatOleh?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type AbsensiCountAggregateInputType = {
   status?: true
   jamMasuk?: true
   jamPulang?: true
+  keterangan?: true
   dicatatOleh?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type AbsensiGroupByOutputType = {
   status: $Enums.StatusKehadiran
   jamMasuk: string | null
   jamPulang: string | null
+  keterangan: string | null
   dicatatOleh: string | null
   updatedAt: Date
   _count: AbsensiCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type AbsensiWhereInput = {
   status?: Prisma.EnumStatusKehadiranFilter<"Absensi"> | $Enums.StatusKehadiran
   jamMasuk?: Prisma.StringNullableFilter<"Absensi"> | string | null
   jamPulang?: Prisma.StringNullableFilter<"Absensi"> | string | null
+  keterangan?: Prisma.StringNullableFilter<"Absensi"> | string | null
   dicatatOleh?: Prisma.StringNullableFilter<"Absensi"> | string | null
   updatedAt?: Prisma.DateTimeFilter<"Absensi"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
@@ -216,6 +224,7 @@ export type AbsensiOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   jamMasuk?: Prisma.SortOrderInput | Prisma.SortOrder
   jamPulang?: Prisma.SortOrderInput | Prisma.SortOrder
+  keterangan?: Prisma.SortOrderInput | Prisma.SortOrder
   dicatatOleh?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
@@ -232,6 +241,7 @@ export type AbsensiWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumStatusKehadiranFilter<"Absensi"> | $Enums.StatusKehadiran
   jamMasuk?: Prisma.StringNullableFilter<"Absensi"> | string | null
   jamPulang?: Prisma.StringNullableFilter<"Absensi"> | string | null
+  keterangan?: Prisma.StringNullableFilter<"Absensi"> | string | null
   dicatatOleh?: Prisma.StringNullableFilter<"Absensi"> | string | null
   updatedAt?: Prisma.DateTimeFilter<"Absensi"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
@@ -244,6 +254,7 @@ export type AbsensiOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   jamMasuk?: Prisma.SortOrderInput | Prisma.SortOrder
   jamPulang?: Prisma.SortOrderInput | Prisma.SortOrder
+  keterangan?: Prisma.SortOrderInput | Prisma.SortOrder
   dicatatOleh?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AbsensiCountOrderByAggregateInput
@@ -261,6 +272,7 @@ export type AbsensiScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumStatusKehadiranWithAggregatesFilter<"Absensi"> | $Enums.StatusKehadiran
   jamMasuk?: Prisma.StringNullableWithAggregatesFilter<"Absensi"> | string | null
   jamPulang?: Prisma.StringNullableWithAggregatesFilter<"Absensi"> | string | null
+  keterangan?: Prisma.StringNullableWithAggregatesFilter<"Absensi"> | string | null
   dicatatOleh?: Prisma.StringNullableWithAggregatesFilter<"Absensi"> | string | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Absensi"> | Date | string
 }
@@ -271,6 +283,7 @@ export type AbsensiCreateInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutAbsensiInput
@@ -283,6 +296,7 @@ export type AbsensiUncheckedCreateInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
 }
@@ -293,6 +307,7 @@ export type AbsensiUpdateInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutAbsensiNestedInput
@@ -305,6 +320,7 @@ export type AbsensiUncheckedUpdateInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -316,6 +332,7 @@ export type AbsensiCreateManyInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
 }
@@ -326,6 +343,7 @@ export type AbsensiUpdateManyMutationInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -337,6 +355,7 @@ export type AbsensiUncheckedUpdateManyInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -363,6 +382,7 @@ export type AbsensiCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   jamMasuk?: Prisma.SortOrder
   jamPulang?: Prisma.SortOrder
+  keterangan?: Prisma.SortOrder
   dicatatOleh?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -374,6 +394,7 @@ export type AbsensiMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   jamMasuk?: Prisma.SortOrder
   jamPulang?: Prisma.SortOrder
+  keterangan?: Prisma.SortOrder
   dicatatOleh?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -385,6 +406,7 @@ export type AbsensiMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   jamMasuk?: Prisma.SortOrder
   jamPulang?: Prisma.SortOrder
+  keterangan?: Prisma.SortOrder
   dicatatOleh?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -441,6 +463,7 @@ export type AbsensiCreateWithoutPegawaiInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
 }
@@ -451,6 +474,7 @@ export type AbsensiUncheckedCreateWithoutPegawaiInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
 }
@@ -491,6 +515,7 @@ export type AbsensiScalarWhereInput = {
   status?: Prisma.EnumStatusKehadiranFilter<"Absensi"> | $Enums.StatusKehadiran
   jamMasuk?: Prisma.StringNullableFilter<"Absensi"> | string | null
   jamPulang?: Prisma.StringNullableFilter<"Absensi"> | string | null
+  keterangan?: Prisma.StringNullableFilter<"Absensi"> | string | null
   dicatatOleh?: Prisma.StringNullableFilter<"Absensi"> | string | null
   updatedAt?: Prisma.DateTimeFilter<"Absensi"> | Date | string
 }
@@ -501,6 +526,7 @@ export type AbsensiCreateManyPegawaiInput = {
   status: $Enums.StatusKehadiran
   jamMasuk?: string | null
   jamPulang?: string | null
+  keterangan?: string | null
   dicatatOleh?: string | null
   updatedAt?: Date | string
 }
@@ -511,6 +537,7 @@ export type AbsensiUpdateWithoutPegawaiInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -521,6 +548,7 @@ export type AbsensiUncheckedUpdateWithoutPegawaiInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -531,6 +559,7 @@ export type AbsensiUncheckedUpdateManyWithoutPegawaiInput = {
   status?: Prisma.EnumStatusKehadiranFieldUpdateOperationsInput | $Enums.StatusKehadiran
   jamMasuk?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jamPulang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keterangan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dicatatOleh?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -544,6 +573,7 @@ export type AbsensiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   jamMasuk?: boolean
   jamPulang?: boolean
+  keterangan?: boolean
   dicatatOleh?: boolean
   updatedAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
@@ -556,6 +586,7 @@ export type AbsensiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   jamMasuk?: boolean
   jamPulang?: boolean
+  keterangan?: boolean
   dicatatOleh?: boolean
   updatedAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
@@ -568,6 +599,7 @@ export type AbsensiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   jamMasuk?: boolean
   jamPulang?: boolean
+  keterangan?: boolean
   dicatatOleh?: boolean
   updatedAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
@@ -580,11 +612,12 @@ export type AbsensiSelectScalar = {
   status?: boolean
   jamMasuk?: boolean
   jamPulang?: boolean
+  keterangan?: boolean
   dicatatOleh?: boolean
   updatedAt?: boolean
 }
 
-export type AbsensiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "tanggal" | "status" | "jamMasuk" | "jamPulang" | "dicatatOleh" | "updatedAt", ExtArgs["result"]["absensi"]>
+export type AbsensiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "tanggal" | "status" | "jamMasuk" | "jamPulang" | "keterangan" | "dicatatOleh" | "updatedAt", ExtArgs["result"]["absensi"]>
 export type AbsensiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
 }
@@ -607,6 +640,7 @@ export type $AbsensiPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.StatusKehadiran
     jamMasuk: string | null
     jamPulang: string | null
+    keterangan: string | null
     dicatatOleh: string | null
     updatedAt: Date
   }, ExtArgs["result"]["absensi"]>
@@ -1039,6 +1073,7 @@ export interface AbsensiFieldRefs {
   readonly status: Prisma.FieldRef<"Absensi", 'StatusKehadiran'>
   readonly jamMasuk: Prisma.FieldRef<"Absensi", 'String'>
   readonly jamPulang: Prisma.FieldRef<"Absensi", 'String'>
+  readonly keterangan: Prisma.FieldRef<"Absensi", 'String'>
   readonly dicatatOleh: Prisma.FieldRef<"Absensi", 'String'>
   readonly updatedAt: Prisma.FieldRef<"Absensi", 'DateTime'>
 }

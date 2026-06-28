@@ -9,13 +9,13 @@ export async function GET(request: Request) {
   const mode = (searchParams.get("mode") || "hari") as "hari" | "minggu" | "dua-minggu" | "bulan";
   const anchor = searchParams.get("anchor") || toKey(new Date());
 
-  const { start, end } = periodeRange(mode, new Date(anchor + "T00:00:00.000Z"));
+  const { start, end } = periodeRange(mode, anchor);
 
   const dates: string[] = [];
   const cur = new Date(start);
   while (cur <= end) {
     dates.push(toKey(cur));
-    cur.setDate(cur.getDate() + 1);
+    cur.setUTCDate(cur.getUTCDate() + 1);
   }
 
   const cacheKey = `rekap:${mode}:${anchor}`;
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       }),
       prisma.absensi.findMany({
         where: { tanggal: { gte: start, lte: end } },
-        select: { pegawaiId: true, status: true, tanggal: true, jamMasuk: true, jamPulang: true },
+        select: { pegawaiId: true, status: true, tanggal: true, jamMasuk: true, jamPulang: true, keterangan: true },
       }),
     ]);
 
@@ -41,10 +41,10 @@ export async function GET(request: Request) {
 
     const detail = pegawai.map((p) => {
       const absensi = absensiByPegawai.get(p.id) || [];
-      const kehadiran: Record<string, { status: string; jamMasuk: string | null; jamPulang: string | null }> = {};
+      const kehadiran: Record<string, { status: string; jamMasuk: string | null; jamPulang: string | null; keterangan: string | null }> = {};
       for (const a of absensi) {
         const key = toKey(a.tanggal);
-        kehadiran[key] = { status: a.status, jamMasuk: a.jamMasuk, jamPulang: a.jamPulang };
+        kehadiran[key] = { status: a.status, jamMasuk: a.jamMasuk, jamPulang: a.jamPulang, keterangan: a.keterangan };
       }
       return { nik: p.nik, nama: p.nama, divisi: p.divisi.nama, kehadiran };
     });

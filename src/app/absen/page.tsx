@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import AppShell from "@/components/AppShell";
-import { Clock, CheckCircle2, Circle, Search } from "lucide-react";
+import { Clock, Search } from "lucide-react";
 
 function SkeletonRow() {
   return (
@@ -34,25 +34,14 @@ const STATUS_META: Record<string, { label: string; border: string; bg: string }>
   BELUM:     { label: "Belum",     border: "border-gray-300",                     bg: "bg-gray-100 text-gray-400 border-gray-200" },
 };
 
-function PagiBadge({ status }: { status: string }) {
-  const m = STATUS_META[status] || STATUS_META.BELUM;
-  return <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${m.bg}`}>{m.label}</span>;
-}
 
 function PulangStatus({ abs }: { abs: any }) {
   const s = abs?.status;
   if (!abs || !s || s === "BELUM") return <span className="text-[10px] text-gray-300">—</span>;
   if (s === "IZIN" || s === "CUTI" || s === "ALPHA") return <span className="text-[10px] text-gray-400">—</span>;
-  if (abs.jamPulang) {
-    return (
-      <span className="flex items-center gap-0.5 text-[10px] font-medium text-green-600">
-        <CheckCircle2 size={10} /> Done
-      </span>
-    );
-  }
   return (
-    <span className="flex items-center gap-0.5 text-[10px] font-medium text-orange-500">
-      <Circle size={10} /> Belum
+    <span className={`text-[10px] font-medium ${abs.jamPulang ? "text-green-600" : "text-orange-500"}`}>
+      {abs.jamPulang ? "Done" : "Belum"}
     </span>
   );
 }
@@ -68,6 +57,8 @@ export default function AbsenPage() {
   const [loading, setLoading] = useState(true);
   const [filterDivisi, setFilterDivisi] = useState<string>("");
   const [searchName, setSearchName] = useState("");
+  const [izinKet, setIzinKet] = useState<Record<string, string>>({});
+  const [savingKet, setSavingKet] = useState<Record<string, boolean>>({});
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pendingUpdates = useRef<Map<string, any>>(new Map());
 
@@ -86,8 +77,8 @@ export default function AbsenPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  async function upsert(pegawaiId: string, status: string, jamMasuk?: string, jamPulang?: string) {
-    pendingUpdates.current.set(pegawaiId, { status, jamMasuk, jamPulang });
+  async function upsert(pegawaiId: string, status: string, jamMasuk?: string, jamPulang?: string, keterangan?: string) {
+    pendingUpdates.current.set(pegawaiId, { status, jamMasuk, jamPulang, keterangan });
     setData((prev) =>
       prev.map((item) =>
         item.id === pegawaiId
@@ -119,6 +110,7 @@ export default function AbsenPage() {
     upsert(pegawaiId, s,
       field === "jamMasuk" ? time : abs.jamMasuk || undefined,
       field === "jamPulang" ? time : abs.jamPulang || undefined,
+      abs.keterangan || undefined,
     );
   }
 
@@ -187,9 +179,9 @@ export default function AbsenPage() {
                   const status = abs?.status || "BELUM";
                   const meta = STATUS_META[status] || STATUS_META.BELUM;
                   return (
-                    <div key={item.id} className="px-4 py-2.5 sm:py-2">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                        <div className="flex items-center gap-2 sm:w-36 shrink-0">
+                    <div key={item.id} className="px-4 py-3 sm:py-2.5">
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                        <div className="flex items-center gap-1.5 sm:w-36 shrink-0 sm:pt-1">
                           <span className="font-medium text-sm">{item.nama}</span>
                           <span className="text-[11px] text-gray-400 font-mono">{item.nik}</span>
                         </div>
@@ -203,6 +195,7 @@ export default function AbsenPage() {
                               upsert(item.id, s,
                                 s === "BELUM" ? undefined : (cur.jamMasuk || undefined),
                                 s === "BELUM" ? undefined : (cur.jamPulang || undefined),
+                                s === "BELUM" ? undefined : (cur.keterangan || undefined),
                               );
                             }}
                             className={`text-sm border rounded-lg px-2 py-1.5 bg-white ${meta.border}`}
@@ -213,48 +206,77 @@ export default function AbsenPage() {
                           </select>
 
                           {needsJam(status) ? (
-                            <>
-                              <div className="flex items-center gap-1.5">
-                                <div className="flex flex-col items-start gap-0.5">
-                                  <span className="text-[9px] text-gray-400 font-medium">Masuk</span>
-                                  <div className="flex items-center gap-1">
-                                    <input
-                                      type="time"
-                                      value={abs?.jamMasuk || ""}
-                                      onChange={(e) => upsert(item.id, status, e.target.value, abs?.jamPulang || undefined)}
-                                      className="border rounded-lg px-2 py-1.5 text-sm w-22 bg-white"
-                                    />
-                                    <button
-                                      onClick={() => setJam(item.id, "jamMasuk")}
-                                      className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 transition"
-                                      title="Sekarang"
-                                    >
-                                      <Clock size={14} />
-                                    </button>
-                                  </div>
-                                </div>
-                                <span className="text-[10px] text-gray-300 font-mono mt-4">→</span>
-                                <div className="flex flex-col items-start gap-0.5">
-                                  <span className="text-[9px] text-gray-400 font-medium">Pulang</span>
-                                  <div className="flex items-center gap-1">
-                                    <input
-                                      type="time"
-                                      value={abs?.jamPulang || ""}
-                                      onChange={(e) => upsert(item.id, status, abs?.jamMasuk || undefined, e.target.value)}
-                                      className="border rounded-lg px-2 py-1.5 text-sm w-22 bg-white"
-                                    />
-                                    <button
-                                      onClick={() => setJam(item.id, "jamPulang")}
-                                      className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 transition"
-                                      title="Sekarang"
-                                    >
-                                      <Clock size={14} />
-                                    </button>
-                                  </div>
-                                </div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="time"
+                                  value={abs?.jamMasuk || ""}
+                                  onChange={(e) => upsert(item.id, status, e.target.value, abs?.jamPulang || undefined, abs?.keterangan || undefined)}
+                                  className="border rounded-lg px-2 py-1.5 text-sm w-22 bg-white"
+                                  title="Jam masuk"
+                                />
+                                <button
+                                  onClick={() => setJam(item.id, "jamMasuk")}
+                                  className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 transition"
+                                  title="Sekarang"
+                                >
+                                  <Clock size={14} />
+                                </button>
+                              </div>
+                              <span className="text-[11px] text-gray-300 hidden sm:inline">→</span>
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="time"
+                                  value={abs?.jamPulang || ""}
+                                  onChange={(e) => upsert(item.id, status, abs?.jamMasuk || undefined, e.target.value, abs?.keterangan || undefined)}
+                                  className="border rounded-lg px-2 py-1.5 text-sm w-22 bg-white"
+                                  title="Jam pulang"
+                                />
+                                <button
+                                  onClick={() => setJam(item.id, "jamPulang")}
+                                  className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 transition"
+                                  title="Sekarang"
+                                >
+                                  <Clock size={14} />
+                                </button>
                               </div>
                               <PulangStatus abs={abs} />
-                            </>
+                            </div>
+                          ) : status === "IZIN" ? (
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={izinKet[item.id] ?? abs?.keterangan ?? ""}
+                                onChange={(e) => setIzinKet((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                placeholder="Keterangan izin..."
+                                className="border rounded-lg px-2 py-1.5 text-xs w-full min-w-[140px] sm:w-48 bg-white"
+                              />
+                              <button
+                                onClick={async () => {
+                                  const val = izinKet[item.id] ?? abs?.keterangan ?? "";
+                                  setSavingKet((p) => ({ ...p, [item.id]: true }));
+                                  try {
+                                    await fetch("/api/absensi", {
+                                      method: "PUT",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({ pegawaiId: item.id, tanggal, status: "IZIN", keterangan: val || null }),
+                                    });
+                                    await fetchData();
+                                  } finally {
+                                    setSavingKet((p) => ({ ...p, [item.id]: false }));
+                                    setIzinKet((prev) => {
+                                      const next = { ...prev };
+                                      delete next[item.id];
+                                      return next;
+                                    });
+                                  }
+                                }}
+                                disabled={savingKet[item.id]}
+                                className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-navy hover:bg-navy-soft transition disabled:opacity-40 shrink-0"
+                              >
+                                {savingKet[item.id] ? "Menyimpan..." : "Simpan"}
+                              </button>
+                            </div>
                           ) : (
                             <span className="text-[11px] text-gray-300 italic">—</span>
                           )}

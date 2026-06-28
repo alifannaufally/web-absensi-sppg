@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   title: "Absensi SPPG",
   description: "Sistem Absensi Pos Security",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/bgn.svg",
+    apple: "/bgn.svg",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

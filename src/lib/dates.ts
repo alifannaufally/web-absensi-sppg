@@ -2,21 +2,19 @@ export function toKey(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-export function addDays(d: Date, n: number) {
-  const r = new Date(d);
-  r.setDate(r.getDate() + n);
-  return r;
+export function addDays(dateStr: string, n: number) {
+  const d = new Date(dateStr + "T00:00:00.000Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
 }
 
-export function periodeRange(mode: "hari" | "minggu" | "dua-minggu" | "bulan", anchor: Date) {
-  const end = new Date(anchor);
-  end.setHours(0, 0, 0, 0);
-
-  let start: Date;
+export function periodeRange(mode: "hari" | "minggu" | "dua-minggu" | "bulan", anchor: string) {
+  let end = anchor;
+  let start: string;
 
   switch (mode) {
     case "hari":
-      start = new Date(end);
+      start = end;
       break;
     case "minggu":
       start = addDays(end, -6);
@@ -25,12 +23,14 @@ export function periodeRange(mode: "hari" | "minggu" | "dua-minggu" | "bulan", a
       start = addDays(end, -13);
       break;
     case "bulan":
-      start = new Date(end.getFullYear(), end.getMonth(), 1);
+      start = end.slice(0, 7) + "-01";
       break;
   }
 
-  start.setHours(0, 0, 0, 0);
-  return { start, end };
+  return {
+    start: new Date(start + "T00:00:00.000Z"),
+    end: new Date(end + "T23:59:59.999Z"),
+  };
 }
 
 export function formatDate(d: Date) {

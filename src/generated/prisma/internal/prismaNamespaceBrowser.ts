@@ -135,6 +135,7 @@ export const AbsensiScalarFieldEnum = {
   status: 'status',
   jamMasuk: 'jamMasuk',
   jamPulang: 'jamPulang',
+  keterangan: 'keterangan',
   dicatatOleh: 'dicatatOleh',
   updatedAt: 'updatedAt'
 } as const

@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       }),
       prisma.absensi.findMany({
         where: { tanggal: { gte: dateStart, lte: dateEnd } },
-        select: { id: true, pegawaiId: true, status: true, jamMasuk: true, jamPulang: true },
+        select: { id: true, pegawaiId: true, status: true, jamMasuk: true, jamPulang: true, keterangan: true },
       }),
     ]);
 
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   await requirePermission("absen:write");
-  const { pegawaiId, tanggal, status, jamMasuk, jamPulang } = await request.json();
+  const { pegawaiId, tanggal, status, jamMasuk, jamPulang, keterangan } = await request.json();
   if (!pegawaiId || !tanggal) {
     return Response.json({ error: "Data tidak lengkap" }, { status: 400 });
   }
@@ -74,9 +74,9 @@ export async function PUT(request: Request) {
 
   const absensi = await prisma.absensi.upsert({
     where: { pegawaiId_tanggal: { pegawaiId, tanggal: dateObj } },
-    update: { status: status as any, jamMasuk: jamMasuk || null, jamPulang: jamPulang || null },
-    create: { pegawaiId, tanggal: dateObj, status: status as any, jamMasuk: jamMasuk || null, jamPulang: jamPulang || null },
-    select: { id: true, pegawaiId: true, status: true, jamMasuk: true, jamPulang: true },
+    update: { status: status as any, jamMasuk: jamMasuk || null, jamPulang: jamPulang || null, keterangan: keterangan || null },
+    create: { pegawaiId, tanggal: dateObj, status: status as any, jamMasuk: jamMasuk || null, jamPulang: jamPulang || null, keterangan: keterangan || null },
+    select: { id: true, pegawaiId: true, status: true, jamMasuk: true, jamPulang: true, keterangan: true },
   });
 
   return Response.json({ absensi });
